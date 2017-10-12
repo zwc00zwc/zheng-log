@@ -29,22 +29,22 @@ import java.io.IOException;
 public class HttpClient {
     protected Logger logger = LoggerFactory.getLogger(HttpClient.class);
 
-    @Value("${http.maxTotal}")
+    @Value("${http.pool.maxTotal}")
     private Integer maxTotal;
 
-    @Value("${http.defaultMaxPerRoute}")
+    @Value("${http.pool.defaultMaxPerRoute}")
     private Integer defaultMaxPerRoute;
 
-    @Value("${http.connectTimeout}")
+    @Value("${http.request.connectTimeout}")
     private Integer connectTimeout;
 
-    @Value("${http.connectionRequestTimeout}")
+    @Value("${http.request.connectionRequestTimeout}")
     private Integer connectionRequestTimeout;
 
-    @Value("${http.socketTimeout}")
+    @Value("${http.request.socketTimeout}")
     private Integer socketTimeout;
 
-    @Value("${http.staleConnectionCheckEnabled}")
+    @Value("${http.request.staleConnectionCheckEnabled}")
     private boolean staleConnectionCheckEnabled;
 
     @Bean(name = "httpClientConnectionManager")
@@ -65,7 +65,7 @@ public class HttpClient {
         return httpClientBuilder;
     }
 
-    @Bean(name = "httpClient")
+    @Bean(name = "closeableHttpClient")
     public CloseableHttpClient getCloseableHttpClient(@Qualifier("httpClientBuilder") HttpClientBuilder httpClientBuilder){
         return httpClientBuilder.build();
     }

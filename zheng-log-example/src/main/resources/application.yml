@@ -1,7 +1,6 @@
-#从连接池中获取到连接的最长时间
 http:
     request:
-        #链接时间
+        #从连接池中获取到连接的最长时间
         connectionRequestTimeout: 500
         #数据传输的最长时间
         connectTimeout: 2000
@@ -9,8 +8,9 @@ http:
         socketTimeout: 10000
         #提交请求前测试连接是否可用
         staleConnectionCheckEnabled: true
+
     pool:
-        #设置连接总数
-        maxTotal: 200
-        #设置每个地址的并发数
-        defaultMaxPerRoute: 100
+       #设置连接总数
+       maxTotal: 200
+       #设置每个地址的并发数
+       defaultMaxPerRoute: 100
