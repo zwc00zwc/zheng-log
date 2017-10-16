@@ -23,7 +23,7 @@ import java.io.IOException;
  */
 @Component
 public class HttpRequestClient {
-    protected Logger logger = LoggerFactory.getLogger(HttpRequestClient.class);
+    private Logger logger = LoggerFactory.getLogger(HttpRequestClient.class);
 
     @Autowired
     private CloseableHttpClient httpClient;
