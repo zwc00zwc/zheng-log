@@ -21,8 +21,8 @@ public class ElasticSearchController {
     @Autowired
     private HttpRequestClient httpRequestClient;
 
-    @Autowired
-    private TransportClientManager transportClientManager;
+//    @Autowired
+//    private TransportClientManager transportClientManager;
 
     @RequestMapping(value = "put")
     String index(){
@@ -45,7 +45,7 @@ public class ElasticSearchController {
         member.setAbout("这是张三");
         String jsonStr = JSON.toJSONString(member);
         JSONObject jsonObject = JSONObject.parseObject(jsonStr);
-        transportClientManager.addIndexAndDocument("es1","member",jsonObject);
+//        transportClientManager.addIndexAndDocument("es1","member",jsonObject);
         return "index2";
     }
 }
