@@ -8,6 +8,9 @@
   <modules>
     <module>zheng-log-core</module>
     <module>zheng-log-example</module>
+    <module>zheng-log-kafka-core</module>
+    <module>zheng-log-kafka-produce</module>
+    <module>zheng-log-kafka-consume</module>
   </modules>
   <packaging>pom</packaging>
 
@@ -204,7 +207,7 @@
       <dependency>
         <groupId>org.apache.kafka</groupId>
         <artifactId>kafka_2.11</artifactId>
-        <version>0.11.0.0</version>
+        <version>0.11.0.1</version>
       </dependency>
 
     </dependencies>
