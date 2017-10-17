@@ -12,12 +12,16 @@ import java.text.SimpleDateFormat;
  * Created by alan.zheng on 2017/10/16.
  */
 public class JsonLoggerAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
-    public void close() {
-
+    @Override
+    public void start() {
+        super.start();
+        System.out.print("JsonLoggerAppender开始");
     }
 
-    public boolean requiresLayout() {
-        return false;
+    @Override
+    public void stop() {
+        super.stop();
+        System.out.print("JsonLoggerAppender结束");
     }
 
     @Override

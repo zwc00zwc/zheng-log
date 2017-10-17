@@ -26,23 +26,36 @@ public class KafkaConsumerManager {
 
     public void init(){
         Properties props = new Properties();
-        //此处配置的是kafka的端口
+        //建立与kafka集群的初始连接
         props.put("bootstrap.servers", servers);
-        props.put("group.id",groupId);
+        //此消费者所属的消费者组
+        props.put("group.id", groupId);
+        //消费者的偏移将在后台定期提交
+        props.put("enable.auto.commit", "true");
+        //消费者偏移量自动提交给kafka的频率
+        props.put("auto.commit.interval.ms", "1000");
+        props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(props);
+        consumer.subscribe(topics);
+        while (true) {
+            ConsumerRecords<String, String> records = consumer.poll(100);
+            for (ConsumerRecord<String, String> record : records)
+                System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
+        }
+    }
 
+    public static void main(String[] args){
+        Properties props = new Properties();
+        props.put("bootstrap.servers", "192.168.48.129:9092");
+        props.put("group.id", "test");
         props.put("enable.auto.commit", "true");
         props.put("auto.commit.interval.ms", "1000");
         props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-//        //配置value的序列化类
-//        props.put("serializer.class", "kafka.serializer.StringEncoder");
-//        //配置key的序列化类
-//        props.put("key.serializer.class", "kafka.serializer.StringEncoder");
-        consumer = new KafkaConsumer<String, String>(props);
-
-        consumer.subscribe(topics);
-        boolean flag = true;
-        while (flag) {
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(props);
+        consumer.subscribe(Arrays.asList("foo", "bar"));
+        while (true) {
             ConsumerRecords<String, String> records = consumer.poll(100);
             for (ConsumerRecord<String, String> record : records)
                 System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
