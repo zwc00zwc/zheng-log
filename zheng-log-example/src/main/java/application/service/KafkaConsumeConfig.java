@@ -2,7 +2,7 @@ package application.service;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import zheng.kafka.core.KafkaConsumerManager;
+import zheng.log.core.kafka.KafkaConsumerManager;
 
 import java.util.Arrays;
 
@@ -13,6 +13,6 @@ import java.util.Arrays;
 public class KafkaConsumeConfig {
     @Bean(initMethod = "init",name = "kafkaConsumerManager" )
     public KafkaConsumerManager dataflowJobScheduler() {
-        return new KafkaConsumerManager("192.168.48.129:9092","first-group", Arrays.asList("first-topic"));
+        return new KafkaConsumerManager("192.168.48.129:9092","yrw-log-group", Arrays.asList("yrw-log"));
     }
 }

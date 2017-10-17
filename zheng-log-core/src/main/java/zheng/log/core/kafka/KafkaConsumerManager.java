@@ -1,4 +1,4 @@
-package zheng.kafka.core;
+package zheng.log.core.kafka;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Properties;
 
 /**
- * Created by alan.zheng on 2017/10/16.
+ * Created by alan.zheng on 2017/10/17.
  */
 public class KafkaConsumerManager {
     private final String servers;
@@ -36,12 +36,20 @@ public class KafkaConsumerManager {
         props.put("auto.commit.interval.ms", "1000");
         props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(props);
+        consumer = new KafkaConsumer<String, String>(props);
         consumer.subscribe(topics);
+//        while (true) {
+//            ConsumerRecords<String, String> records = consumer.poll(100);
+//            for (ConsumerRecord<String, String> record : records)
+//                System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
+//        }
+    }
+
+    public void receive(AbstractConsumer abstractConsumer){
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(100);
             for (ConsumerRecord<String, String> record : records)
-                System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
+                abstractConsumer.work(record);
         }
     }
 
