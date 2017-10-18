@@ -16,3 +16,6 @@ http:
        maxTotal: 200
        #设置每个地址的并发数
        defaultMaxPerRoute: 100
+
+kafka:
+    servers: 192.168.0.150:9092,192.168.0.151:9092,192.168.0.152:9092

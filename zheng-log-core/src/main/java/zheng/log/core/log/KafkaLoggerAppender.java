@@ -17,6 +17,8 @@ import java.text.SimpleDateFormat;
 public class KafkaLoggerAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
     private String servers;
 
+    private String topic;
+
     private KafkaProducerManager kafkaProducerManager;
     @Override
     public void start() {
@@ -73,7 +75,7 @@ public class KafkaLoggerAppender extends UnsynchronizedAppenderBase<ILoggingEven
 //        System.out.print("当前日志id:" + loggerId );
 //        System.out.print(loggingEvent.getMessage());
         try {
-            kafkaProducerManager.send("yrw-log",sessionId,json);
+            kafkaProducerManager.send(topic,sessionId,json);
         } catch (Exception e) {
             System.out.print("kafkaProducerManager异常");
         }
@@ -87,5 +89,13 @@ public class KafkaLoggerAppender extends UnsynchronizedAppenderBase<ILoggingEven
 
     public void setServers(String servers) {
         this.servers = servers;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 }
