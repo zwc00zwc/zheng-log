@@ -1,10 +1,12 @@
-package zheng.log.common;
+package zheng.log.core.log;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.StackTraceElementProxy;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
 import com.alibaba.fastjson.JSONObject;
 import com.sun.jmx.snmp.Timestamp;
+import zheng.log.core.common.LoggerModel;
+import zheng.log.core.common.LoggerUtility;
 import zheng.log.core.kafka.KafkaProducerManager;
 
 import java.text.SimpleDateFormat;
@@ -12,12 +14,14 @@ import java.text.SimpleDateFormat;
 /**
  * Created by alan.zheng on 2017/10/16.
  */
-public class JsonLoggerAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
+public class KafkaLoggerAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
+    private String servers;
+
     private KafkaProducerManager kafkaProducerManager;
     @Override
     public void start() {
         System.out.print("JsonLoggerAppender开始");
-        kafkaProducerManager = new KafkaProducerManager("192.168.48.129:9092,192.168.48.131:9092,192.168.48.132:9092");
+        kafkaProducerManager = new KafkaProducerManager(servers);
         kafkaProducerManager.init();
         super.start();
     }
@@ -41,11 +45,15 @@ public class JsonLoggerAppender extends UnsynchronizedAppenderBase<ILoggingEvent
         loggerModel.setMessage(loggingEvent.getMessage());
         StringBuilder stringBuilder = new StringBuilder();
         if (loggingEvent.getThrowableProxy()!=null){
-            stringBuilder.append(loggingEvent.getThrowableProxy().getClassName());
+            stringBuilder.append(loggingEvent.getThrowableProxy().getClassName() + "\n");
             StackTraceElementProxy[] step = loggingEvent.getThrowableProxy().getStackTraceElementProxyArray();
             if (step!=null && step.length>0){
                 for (int i =0;i<step.length;i++){
-                    stringBuilder.append(step[i].getSTEAsString());
+                    if (i==step.length-1){
+                        stringBuilder.append(step[i].getSTEAsString());
+                    }else {
+                        stringBuilder.append(step[i].getSTEAsString() + "\n");
+                    }
                 }
             }
         }
@@ -71,5 +79,13 @@ public class JsonLoggerAppender extends UnsynchronizedAppenderBase<ILoggingEvent
         }
 //        System.out.print(json);
 //        loggingEvent.getLoggerName();
+    }
+
+    public String getServers() {
+        return servers;
+    }
+
+    public void setServers(String servers) {
+        this.servers = servers;
     }
 }

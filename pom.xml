@@ -8,8 +8,6 @@
   <modules>
     <module>zheng-log-core</module>
     <module>zheng-log-example</module>
-    <module>zheng-log-kafka-core</module>
-    <module>zheng-log-kafka-produce</module>
     <module>zheng-log-kafka-consume</module>
   </modules>
   <packaging>pom</packaging>

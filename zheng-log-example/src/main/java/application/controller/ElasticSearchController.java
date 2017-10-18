@@ -3,14 +3,10 @@ package application.controller;
 import application.model.Member;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import zheng.log.common.HttpRequestClient;
-import zheng.log.common.TransportClientManager;
+import zheng.log.core.common.HttpRequestClient;
 
 /**
  * Created by alan.zheng on 2017/10/12.

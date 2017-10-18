@@ -1,4 +1,4 @@
-package zheng.log.common;
+package zheng.log.core.common;
 
 import com.alibaba.fastjson.JSONObject;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequestBuilder;
@@ -15,10 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 

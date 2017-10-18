@@ -87,7 +87,8 @@
         <!--</encoder>-->
     <!--</appender>-->
 
-    <appender name="JSONAPPENDER"  class="zheng.log.common.JsonLoggerAppender">
+    <appender name="JSONAPPENDER"  class="zheng.log.core.log.KafkaLoggerAppender">
+        <servers>192.168.0.150:9092,192.168.0.151:9092,192.168.0.152:9092</servers>
     </appender>
 
     <!-- 日志输出级别 -->

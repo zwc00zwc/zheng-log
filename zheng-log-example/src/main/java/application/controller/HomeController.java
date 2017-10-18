@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import zheng.log.common.HttpRequestClient;
-import zheng.log.common.LoggerUtility;
+import zheng.log.core.common.HttpRequestClient;
+import zheng.log.core.common.LoggerUtility;
 
 /**
  * Created by alan.zheng on 2017/10/12.
@@ -28,7 +28,7 @@ public class HomeController {
         } catch (Exception e) {
             logger.error("测试异常",e);
         }
-//        logger.info("当前访问index页面");
+        logger.info("当前访问index页面");
         return "index";
     }
 

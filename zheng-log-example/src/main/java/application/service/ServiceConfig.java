@@ -1,8 +1,7 @@
 package application.service;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import zheng.log.common.TransportClientManager;
+import zheng.log.core.common.TransportClientManager;
 
 /**
  * Created by alan.zheng on 2017/10/12.

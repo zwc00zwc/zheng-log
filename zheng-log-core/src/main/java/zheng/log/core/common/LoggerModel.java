@@ -1,7 +1,6 @@
-package zheng.log.common;
+package zheng.log.core.common;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Created by alan.zheng on 2017/10/16.

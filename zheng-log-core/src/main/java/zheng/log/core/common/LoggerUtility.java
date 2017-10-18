@@ -1,4 +1,4 @@
-package zheng.log.common;
+package zheng.log.core.common;
 
 /**
  * Created by alan.zheng on 2017/10/16.

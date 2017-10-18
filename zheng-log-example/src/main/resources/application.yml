@@ -1,3 +1,5 @@
+server:
+  port: 8081
 http:
     request:
         #从连接池中获取到连接的最长时间

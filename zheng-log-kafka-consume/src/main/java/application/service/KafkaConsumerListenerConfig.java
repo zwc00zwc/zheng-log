@@ -25,7 +25,7 @@ public class KafkaConsumerListenerConfig {
 
     @Bean(initMethod = "init",name = "kafkaConsumerManager" )
     public KafkaConsumerManager kafkaConsumerManager() {
-        return new KafkaConsumerManager("192.168.48.129:9092,192.168.48.131:9092,192.168.48.132:9092","yrw-log-group", Arrays.asList("yrw-log"));
+        return new KafkaConsumerManager("192.168.0.150:9092,192.168.0.151:9092,192.168.0.152:9092","yrw-log-group", Arrays.asList("yrw-log"));
     }
 
     @Bean(name = "testLogConsumer")
