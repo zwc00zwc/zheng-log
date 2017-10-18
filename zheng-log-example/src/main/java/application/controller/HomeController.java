@@ -1,5 +1,6 @@
 package application.controller;
 
+import application.annotation.ServiceRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,8 @@ public class HomeController {
     @Autowired
     private HttpRequestClient httpRequestClient;
     @RequestMapping(value = "/index")
+    @ServiceRecord(service = "")
     String index(){
-        LoggerUtility.changeLoggerId("222222");
         Integer aa = null;
         try {
             if (aa==1){
@@ -29,6 +30,21 @@ public class HomeController {
             logger.error("测试异常",e);
         }
         logger.info("当前访问index页面");
+        return "index";
+    }
+
+    @RequestMapping(value = "/index3")
+    @ServiceRecord(service = "")
+    String index3(){
+        Integer aa = null;
+        try {
+            if (aa==1){
+
+            }
+        } catch (Exception e) {
+            logger.error("index3测试异常",e);
+        }
+//        logger.info("当前访问index页面");
         return "index";
     }
 

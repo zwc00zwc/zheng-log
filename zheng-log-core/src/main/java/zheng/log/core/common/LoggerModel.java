@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by alan.zheng on 2017/10/16.
  */
 public class LoggerModel implements Serializable {
-    private String loggerId;
+    private String sessionId;
     private String level;
     private String loggerName;
     private String thread;
@@ -14,12 +14,12 @@ public class LoggerModel implements Serializable {
     private String messageDetail;
     private String date;
 
-    public String getLoggerId() {
-        return loggerId;
+    public String getSessionId() {
+        return sessionId;
     }
 
-    public void setLoggerId(String loggerId) {
-        this.loggerId = loggerId;
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     public String getLevel() {

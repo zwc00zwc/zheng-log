@@ -36,9 +36,9 @@ public class KafkaLoggerAppender extends UnsynchronizedAppenderBase<ILoggingEven
     @Override
     protected void append(ILoggingEvent loggingEvent) {
 
-        String loggerId = LoggerUtility.getLoggerId();
+        String sessionId = LoggerUtility.getSessionId();
         LoggerModel loggerModel = new LoggerModel();
-        loggerModel.setLoggerId(loggerId);
+        loggerModel.setSessionId(sessionId);
         loggerModel.setLoggerName(loggingEvent.getLoggerName());
         loggerModel.setLevel(loggingEvent.getLevel().toString());
         loggerModel.setThread(loggingEvent.getThreadName());
@@ -73,7 +73,7 @@ public class KafkaLoggerAppender extends UnsynchronizedAppenderBase<ILoggingEven
 //        System.out.print("当前日志id:" + loggerId );
 //        System.out.print(loggingEvent.getMessage());
         try {
-            kafkaProducerManager.send("yrw-log",loggerId,json);
+            kafkaProducerManager.send("yrw-log",sessionId,json);
         } catch (Exception e) {
             System.out.print("kafkaProducerManager异常");
         }

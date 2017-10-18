@@ -87,17 +87,12 @@
         <!--</encoder>-->
     <!--</appender>-->
 
-    <appender name="JSONAPPENDER"  class="zheng.log.core.log.KafkaLoggerAppender">
-        <servers>192.168.0.150:9092,192.168.0.151:9092,192.168.0.152:9092</servers>
-    </appender>
-
     <!-- 日志输出级别 -->
     <root level="INFO">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
         <!--<appender-ref ref="MYBATISFILE"/>-->
         <!--<appender-ref ref="ERRORLOG"/>-->
-        <!--<appender-ref ref="JSONAPPENDER"/>-->
     </root>
 
 </configuration>
