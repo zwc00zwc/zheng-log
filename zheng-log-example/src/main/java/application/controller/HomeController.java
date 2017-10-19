@@ -53,4 +53,10 @@ public class HomeController {
         String result = httpRequestClient.doGet("http://localhost:8080/home/index");
         return result;
     }
+
+    @ServiceRecord(service = "当前访问index4")
+    @RequestMapping(value = "/index4")
+    String index4(){
+        return "index4";
+    }
 }
