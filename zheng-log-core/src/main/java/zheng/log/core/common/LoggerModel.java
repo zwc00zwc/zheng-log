@@ -6,6 +6,7 @@ import java.io.Serializable;
  * Created by alan.zheng on 2017/10/16.
  */
 public class LoggerModel implements Serializable {
+    private String localIp;
     private String sessionId;
     private String level;
     private String loggerName;
@@ -13,6 +14,14 @@ public class LoggerModel implements Serializable {
     private String message;
     private String messageDetail;
     private String date;
+
+    public String getLocalIp() {
+        return localIp;
+    }
+
+    public void setLocalIp(String localIp) {
+        this.localIp = localIp;
+    }
 
     public String getSessionId() {
         return sessionId;

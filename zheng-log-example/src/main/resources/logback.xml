@@ -88,7 +88,8 @@
     <!--</appender>-->
 
     <appender name="kafkaLoggerAppender"  class="zheng.log.core.log.KafkaLoggerAppender">
-        <servers>192.168.0.150:9092,192.168.0.151:9092,192.168.0.152:9092</servers>
+        <servers>192.168.48.129:9092,192.168.48.131:9092,192.168.48.132:9092</servers>
+        <topic>yrw-log</topic>
     </appender>
 
     <!-- 日志输出级别 -->

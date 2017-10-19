@@ -9,6 +9,8 @@ import zheng.log.core.common.LoggerModel;
 import zheng.log.core.common.LoggerUtility;
 import zheng.log.core.kafka.KafkaProducerManager;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 
 /**
@@ -40,6 +42,7 @@ public class KafkaLoggerAppender extends UnsynchronizedAppenderBase<ILoggingEven
 
         String sessionId = LoggerUtility.getSessionId();
         LoggerModel loggerModel = new LoggerModel();
+        loggerModel.setLocalIp(getLocalIP());
         loggerModel.setSessionId(sessionId);
         loggerModel.setLoggerName(loggingEvent.getLoggerName());
         loggerModel.setLevel(loggingEvent.getLevel().toString());
@@ -81,6 +84,27 @@ public class KafkaLoggerAppender extends UnsynchronizedAppenderBase<ILoggingEven
         }
 //        System.out.print(json);
 //        loggingEvent.getLoggerName();
+    }
+
+    private String getLocalIP(){
+        InetAddress addr = null;
+        try {
+            addr = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        byte[] ipAddr = addr.getAddress();
+        String ipAddrStr = "";
+        for (int i = 0; i < ipAddr.length; i++) {
+            if (i > 0) {
+                ipAddrStr += ".";
+            }
+            ipAddrStr += ipAddr[i] & 0xFF;
+        }
+        //System.out.println(ipAddrStr);
+        return ipAddrStr;
     }
 
     public String getServers() {
