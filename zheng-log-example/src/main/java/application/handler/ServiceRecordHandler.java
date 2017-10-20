@@ -53,9 +53,25 @@ public class ServiceRecordHandler {
                 System.out.print("生成sessionId异常");
             }
         }
+        String requestIp = LoggerUtility.getRequestIp();
+        if (StringUtils.isEmpty(requestIp)){
+            String ip = ((ServletRequestAttributes) RequestContextHolder
+                    .getRequestAttributes()).getRequest().getHeader("X-Forwarded-For");
+            if (StringUtils.isBlank(ip)) {
+                ip = ((ServletRequestAttributes) RequestContextHolder
+                        .getRequestAttributes()).getRequest().getRemoteAddr();
+            }
+            // 如果是负载均衡，取第一个IP
+            if (StringUtils.isNotBlank(ip) && ip.indexOf(",") > -1) {
+                String[] arr = ip.split(",");
+                ip = arr[0];
+            }
+            LoggerUtility.changeRequestIp(ip);
+        }
         LoggerModel loggerModel = new LoggerModel();
         loggerModel.setLocalIp(getLocalIP());
-        loggerModel.setSessionId(sessionId);
+        loggerModel.setRequestIp(LoggerUtility.getRequestIp());
+        loggerModel.setSessionId(LoggerUtility.getSessionId());
         loggerModel.setLoggerName("Service Log");
         loggerModel.setThread(Thread.currentThread().getName());
         loggerModel.setMessage(serviceRecord.service());

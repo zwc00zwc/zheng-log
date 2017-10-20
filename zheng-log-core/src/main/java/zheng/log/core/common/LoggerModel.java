@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class LoggerModel implements Serializable {
     private String localIp;
+    private String requestIp;
     private String sessionId;
     private String level;
     private String loggerName;
@@ -21,6 +22,14 @@ public class LoggerModel implements Serializable {
 
     public void setLocalIp(String localIp) {
         this.localIp = localIp;
+    }
+
+    public String getRequestIp() {
+        return requestIp;
+    }
+
+    public void setRequestIp(String requestIp) {
+        this.requestIp = requestIp;
     }
 
     public String getSessionId() {

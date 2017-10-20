@@ -43,6 +43,7 @@ public class KafkaLoggerAppender extends UnsynchronizedAppenderBase<ILoggingEven
         String sessionId = LoggerUtility.getSessionId();
         LoggerModel loggerModel = new LoggerModel();
         loggerModel.setLocalIp(getLocalIP());
+        loggerModel.setRequestIp(LoggerUtility.getRequestIp());
         loggerModel.setSessionId(sessionId);
         loggerModel.setLoggerName(loggingEvent.getLoggerName());
         loggerModel.setLevel(loggingEvent.getLevel().toString());
