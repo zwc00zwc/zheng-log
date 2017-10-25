@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import zheng.log.core.common.HttpRequestClient;
+import zheng.log.core.common.TransportClientManager;
 
 /**
  * Created by alan.zheng on 2017/10/12.
@@ -17,31 +18,43 @@ public class ElasticSearchController {
     @Autowired
     private HttpRequestClient httpRequestClient;
 
-//    @Autowired
-//    private TransportClientManager transportClientManager;
+    @Autowired
+    private TransportClientManager transportClientManager;
 
     @RequestMapping(value = "put")
-    String index(){
+    String index(Long id){
         Member member = new Member();
-        member.setId(1L);
-        member.setName("张三");
+        member.setId(id);
+        member.setName("张三"+id+"");
         member.setAge(17);
-        member.setAbout("这是张三");
+        member.setAbout("这是张三"+id+"");
         String jsonStr = JSON.toJSONString(member);
-        String result = httpRequestClient.doJsonPost("http://192.168.48.129:9200/elastic1/member/1",jsonStr);
+        String result = httpRequestClient.doJsonPost("http://192.168.48.129:9200/elastic1/member/2",jsonStr);
         return result;
     }
 
     @RequestMapping(value = "put2")
-    String index2(){
+    String index2(Long id){
         Member member = new Member();
         member.setId(1L);
-        member.setName("张三");
+        member.setName("李四"+id+"");
         member.setAge(17);
-        member.setAbout("这是张三");
+        member.setAbout("这是张三"+id+"");
         String jsonStr = JSON.toJSONString(member);
         JSONObject jsonObject = JSONObject.parseObject(jsonStr);
-//        transportClientManager.addIndexAndDocument("es1","member",jsonObject);
+        transportClientManager.addIndexAndDocument("es1","member", id.toString(),jsonObject);
         return "index2";
+    }
+
+    @RequestMapping(value = "get")
+    String index3(Long id){
+        JSONObject jsonObject = transportClientManager.getIndexAndDocument("es1","member",id.toString());
+        return jsonObject.toJSONString();
+    }
+
+    @RequestMapping(value = "delete")
+    String index4(Long id){
+        transportClientManager.deleteIndex("es1","member",id.toString());
+        return "delete";
     }
 }
