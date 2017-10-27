@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -22,8 +23,22 @@ public class WeixinManager {
 
     private static final String grantTypeForToken = "client_credential";
 
+    private static final String redisWenxin = "redis_wenxin";
+
+    @Value("${weixin.url}")
+    private String url;
+
+    @Value("${weixin.appid}")
+    private String appid;
+
+    @Value("${weixin.appsecret}")
+    private String appsecret;
+
     @Autowired
     private HttpRequestClient httpRequestClient;
+
+    @Autowired
+    private RedisManager redisManager;
 
     private Map<String, Object> getAccessToken(String appid, String secret){
         String url = tokenUrl+"?grant_type=client_credential&"+"appid="+appid+"&secret="+secret;
@@ -73,7 +88,7 @@ public class WeixinManager {
     }
 
     private void send(JSONObject jsonObject){
-        String accessToken = "8v0xeceYu49w-c4nPrCNjiG4dGTtcNJP5_kUL-HRBt-jOjd8aDKzcXfzVx23GhbWW233r8u0ZpVdeqNelY0psDxzxXDA0lz_DGmNbBrz1aMd4jok6l-uXj4gV9ggcJcdNGMhACAQJP";
+        String accessToken = getAccessToken();
         String postUrl="https://api.weixin.qq.com/cgi-bin/message/template/send";
         String retCode = httpRequestClient.doJsonPost(postUrl+"?access_token="+accessToken+"", jsonObject.toString());
         if (StringUtils.isBlank(retCode)) {
@@ -85,5 +100,33 @@ public class WeixinManager {
         if (!"0".equals(errcode)){
             logger.error("微信发送模板消息异常" + errmsg + "");
         }
+    }
+
+    private String getAccessToken(){
+        // 从redis获取缓存
+        String token = redisManager.getString(redisWenxin);
+        if (StringUtils.isNotBlank(token)) {
+            return token;
+        }
+        // 重新获取token
+        return reflashToken();
+    }
+
+    private String reflashToken(){
+        String getTokenurl = tokenUrl+"?grant_type="+grantTypeForToken +"&appid="+appid+"&secret="+appsecret;
+        String retCode = httpRequestClient.doGet(getTokenurl);
+        if (StringUtils.isBlank(retCode)) {
+            logger.error("微信JsApi获取accessToken返回失败: retCode={}" + retCode);
+            return null;
+        }
+        Map<String, Object> tokenMap = JSON.parseObject(retCode, java.util.HashMap.class);
+        String accessToken = tokenMap.get("access_token").toString();
+        String expiresIn = tokenMap.get("expires_in").toString();
+        if (StringUtils.isBlank(accessToken) || StringUtils.isBlank(expiresIn)) {
+            logger.error("微信JsApi获取accessToken返回失败:" + tokenMap);
+            return null;
+        }
+        redisManager.putString(redisWenxin,accessToken);
+        return accessToken;
     }
 }

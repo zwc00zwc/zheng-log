@@ -17,6 +17,11 @@ http:
        #设置每个地址的并发数
        defaultMaxPerRoute: 100
 
+elasticSearch:
+    clusterName: elasticSearch-zheng
+    nodeName: node-1
+    servers: 192.168.48.129:9300,192.168.48.131:9300,192.168.48.132:9300
+
 kafka:
     servers: 192.168.48.129:9092,192.168.48.131:9092,192.168.48.132:9092
     topic: yrw-log

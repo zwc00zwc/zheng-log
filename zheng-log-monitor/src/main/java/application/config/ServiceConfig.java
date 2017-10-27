@@ -1,5 +1,6 @@
 package application.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import zheng.log.core.common.TransportClientManager;
@@ -10,7 +11,8 @@ import zheng.log.core.common.TransportClientManager;
 @Configuration
 public class ServiceConfig {
     @Bean(initMethod = "init",name = "transportClientManager" )
-    public TransportClientManager dataflowJobScheduler() {
-        return new TransportClientManager("elasticSearch-zheng","node-1","192.168.48.129:9300,192.168.48.131:9300,192.168.48.132:9300");
+    public TransportClientManager dataflowJobScheduler(@Value("${elasticSearch.clusterName}")String clusterName, @Value("${elasticSearch.nodeName}")String nodeName,
+                                                       @Value("${elasticSearch.servers}")String servers) {
+        return new TransportClientManager(clusterName,nodeName,servers);
     }
 }

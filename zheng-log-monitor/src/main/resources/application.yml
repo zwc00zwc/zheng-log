@@ -1,3 +1,6 @@
+server:
+  port: 8082
+
 http:
     request:
         #从连接池中获取到连接的最长时间
@@ -20,6 +23,29 @@ reg:
     baseSleepTimeMilliseconds: 1000
     maxSleepTimeMilliseconds: 3000
     maxRetries: 3
+
+redis:
+    host: 192.168.48.129
+    port: 6379
+    password: zwc
+    #database: 0
+    cacheObjectIndex: 5
+    pool:
+      max-total: 128
+      max-idle: 1024
+      min-idle: 128
+      max-active: 128
+      max-wait: 800
+
+weixin:
+    url: https://api.weixin.qq.com/cgi-bin/token
+    appid: wx05aaf675c8f7b3ed
+    appsecret: 93187bebc44df53e567692d39173f0a3
+
+elasticSearch:
+    clusterName: elasticSearch-zheng
+    nodeName: node-1
+    servers: 192.168.48.129:9300,192.168.48.131:9300,192.168.48.132:9300
 
 #日志监控
 monitorLogJob:
