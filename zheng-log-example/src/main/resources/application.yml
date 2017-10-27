@@ -17,6 +17,11 @@ http:
        #设置每个地址的并发数
        defaultMaxPerRoute: 100
 
+weixin:
+    url: https://api.weixin.qq.com/cgi-bin/token
+    appid: wx05aaf675c8f7b3ed
+    appsecret: 93187bebc44df53e567692d39173f0a3
+
 elasticSearch:
     clusterName: elasticSearch-zheng
     nodeName: node-1
