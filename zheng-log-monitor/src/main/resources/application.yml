@@ -1,0 +1,29 @@
+http:
+    request:
+        #从连接池中获取到连接的最长时间
+        connectionRequestTimeout: 500
+        #数据传输的最长时间
+        connectTimeout: 2000
+        #提交请求前测试连接是否可用
+        socketTimeout: 10000
+        #提交请求前测试连接是否可用
+        staleConnectionCheckEnabled: true
+
+    pool:
+       #设置连接总数
+       maxTotal: 200
+       #设置每个地址的并发数
+       defaultMaxPerRoute: 100
+reg:
+    serverList: 192.168.48.129:2181,192.168.48.131:2181,192.168.48.132:2181
+    namespace: monitor-log
+    baseSleepTimeMilliseconds: 1000
+    maxSleepTimeMilliseconds: 3000
+    maxRetries: 3
+
+#日志监控
+monitorLogJob:
+    id: monitorLogJob
+    cron: 0/5 * * * * ?
+    shardingTotalCount: 1
+    description: 监控转让项目

@@ -2,6 +2,7 @@ package application.controller;
 
 import application.model.Member;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,7 @@ public class ElasticSearchController {
     }
 
     @RequestMapping(value = "put2")
-    String index2(Long id){
+    String index2(String index,String type, Long id){
         Member member = new Member();
         member.setId(1L);
         member.setName("李四"+id+"");
@@ -42,7 +43,7 @@ public class ElasticSearchController {
         member.setAbout("这是张三"+id+"");
         String jsonStr = JSON.toJSONString(member);
         JSONObject jsonObject = JSONObject.parseObject(jsonStr);
-        transportClientManager.addIndexAndDocument("es1","member", id.toString(),jsonObject);
+        transportClientManager.addIndexAndDocument(index, type, id.toString(),jsonObject);
         return "index2";
     }
 
@@ -56,5 +57,17 @@ public class ElasticSearchController {
     String index4(Long id){
         transportClientManager.deleteIndex("es1","member",id.toString());
         return "delete";
+    }
+
+    @RequestMapping(value = "index5")
+    String index5(String index,String type){
+        JSONArray jsonArray = transportClientManager.search(index,type);
+        return jsonArray.toJSONString();
+    }
+
+    @RequestMapping(value = "index6")
+    String index6(String index,String type){
+        JSONArray jsonArray = transportClientManager.monitorLog(index,type);
+        return jsonArray.toJSONString();
     }
 }

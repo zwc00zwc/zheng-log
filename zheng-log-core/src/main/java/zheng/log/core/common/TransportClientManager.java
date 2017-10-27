@@ -1,6 +1,7 @@
 package zheng.log.core.common;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.DocWriteResponse;
@@ -9,13 +10,23 @@ import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
-import org.elasticsearch.index.get.GetField;
-import org.elasticsearch.transport.client.PreBuiltTransportClient;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.aggregations.Aggregation;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.bucket.filter.Filter;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.xpack.client.PreBuiltXPackTransportClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +34,10 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -94,36 +109,34 @@ public class TransportClientManager {
         CreateIndexRequestBuilder cib=client.admin().indices().prepareCreate(article);
         XContentBuilder mapping = XContentFactory.jsonBuilder()
                 .startObject()
-                .startObject("properties") //设置之定义字段
-                .startObject("author")
-                .field("type","string") //设置数据类型
-                .endObject()
-                .startObject("title")
-                .field("type","string")
-                .endObject()
-                .startObject("content")
-                .field("type","string")
-                .endObject()
-                .startObject("price")
-                .field("type","string")
-                .endObject()
-                .startObject("view")
-                .field("type","string")
-                .endObject()
-                .startObject("tag")
-                .field("type","string")
-                .endObject()
-                .startObject("date")
-                .field("type","date")  //设置Date类型
-                .field("format","yyyy-MM-dd HH:mm:ss") //设置Date的格式
-                .endObject()
-                .endObject()
+                    .startObject("properties") //设置之定义字段
+                        .startObject("author")
+                        .field("type","string") //设置数据类型
+                        .endObject()
+                        .startObject("title")
+                        .field("type","string")
+                        .endObject()
+                        .startObject("content")
+                        .field("type","string")
+                        .endObject()
+                        .startObject("price")
+                        .field("type","string")
+                        .endObject()
+                        .startObject("view")
+                        .field("type","string")
+                        .endObject()
+                        .startObject("tag")
+                        .field("type","string")
+                        .endObject()
+                        .startObject("date")
+                        .field("type","date")  //设置Date类型
+                        .field("format","yyyy-MM-dd HH:mm:ss") //设置Date的格式
+                        .endObject()
+                    .endObject()
                 .endObject();
         cib.addMapping(content, mapping);
 
         CreateIndexResponse res=cib.execute().actionGet();
-
-        System.out.println("----------添加映射成功----------");
     }
 
     public JSONObject getIndexAndDocument(String index, String type, String id){
@@ -175,6 +188,75 @@ public class TransportClientManager {
         } catch (IOException e) {
             logger.error("addIndexAndDocument 异常",e);
         }
+    }
+
+    public JSONArray search(String index,String type){
+        QueryBuilder queryBuilder = new BoolQueryBuilder().filter(new TermQueryBuilder("color","red")).filter(new TermQueryBuilder("bank","gucci"));
+        SearchResponse response = client.prepareSearch(index).setTypes(type).setQuery(queryBuilder)
+                .addAggregation(AggregationBuilders.terms("agg").field("model"))
+                .setFrom(0).setSize(10).get();
+        SearchHits hits = response.getHits();
+        JSONObject jsonObject = null;
+        JSONArray jsonArray = new JSONArray();
+        Iterator iterator = hits.iterator();
+        while (iterator.hasNext()){
+            SearchHit hit = (SearchHit)iterator.next();
+            Map map = hit.getSource();
+            jsonObject = JSONObject.parseObject(JSON.toJSONString(map));
+            jsonArray.add(jsonObject);
+        }
+        Aggregations aggregations = response.getAggregations();
+        Terms terms = aggregations.get("agg");
+        for (Terms.Bucket entry: terms.getBuckets()){
+            System.out.print("聚合查询key:" + entry.getKey());
+            System.out.print("集合查询value:" + entry.getDocCount());
+        }
+        //aggregation.getAggregations();
+        return jsonArray;
+    }
+
+    public QueryBuilder boolQuery(){
+        QueryBuilder queryBuilder = new BoolQueryBuilder().filter(new TermQueryBuilder("color","red")).filter(new TermQueryBuilder("bank","gucci"));
+        return queryBuilder;
+    }
+
+    public JSONArray monitorLog(String index,String type){
+        JSONArray jsonArray = new JSONArray();
+        Date date = new Date();
+
+        SimpleDateFormat sdfFrom = null;
+        Date dt = null;
+//        try {
+//            sdfFrom = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//            //dt = sdfFrom.parse("2017-10-26 17:29:00");
+//            sdfFrom.format(calendar.)
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.SECOND, -5);
+        sdfFrom = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //dt = sdfFrom.parse("2017-10-26 17:29:00");
+        String gteTime = sdfFrom.format(calendar.getTime());
+        QueryBuilder queryBuilder = new BoolQueryBuilder().must(new TermQueryBuilder("level","ERROR")).filter(new RangeQueryBuilder("date").gte(gteTime).format("yyyy-MM-dd HH:mm:ss"));
+        //QueryBuilder queryBuilder = new RangeQueryBuilder("date").gte(gteTime).format("yyyy-MM-dd HH:mm:ss");
+        SearchResponse response = client.prepareSearch(index).setTypes(type).setQuery(queryBuilder)
+                .addAggregation(AggregationBuilders.terms("agg").field("message"))
+                .get();
+        Aggregations aggregations = response.getAggregations();
+        Terms terms = aggregations.get("agg");
+        JSONObject jsonObject = null;
+        for (Terms.Bucket entry: terms.getBuckets()){
+            jsonObject = new JSONObject();
+            jsonObject.put("log",entry.getKey());
+            jsonObject.put("count",entry.getDocCount());
+            System.out.print("聚合查询key:" + entry.getKey());
+            System.out.print("集合查询value:" + entry.getDocCount());
+            jsonArray.add(jsonObject);
+        }
+        return jsonArray;
     }
 
     /**
