@@ -109,24 +109,25 @@ public class WeixinManager {
             return token;
         }
         // 重新获取token
-        return reflashToken();
+        reflashToken();
+        return redisManager.getString(redisWenxin);
     }
 
-    private String reflashToken(){
+    private void reflashToken(){
         String getTokenurl = tokenUrl+"?grant_type="+grantTypeForToken +"&appid="+appid+"&secret="+appsecret;
         String retCode = httpRequestClient.doGet(getTokenurl);
         if (StringUtils.isBlank(retCode)) {
             logger.error("微信JsApi获取accessToken返回失败: retCode={}" + retCode);
-            return null;
+            return;
         }
         Map<String, Object> tokenMap = JSON.parseObject(retCode, java.util.HashMap.class);
         String accessToken = tokenMap.get("access_token").toString();
         String expiresIn = tokenMap.get("expires_in").toString();
         if (StringUtils.isBlank(accessToken) || StringUtils.isBlank(expiresIn)) {
             logger.error("微信JsApi获取accessToken返回失败:" + tokenMap);
-            return null;
+            return;
         }
         redisManager.putString(redisWenxin,accessToken);
-        return accessToken;
+        redisManager.expire(redisWenxin,7200);
     }
 }
