@@ -50,6 +50,21 @@ elasticSearch:
 #日志监控
 monitorLogJob:
     id: monitorLogJob
-    cron: 0/5 * * * * ?
+#    cron: 0/5 * * * * ?
+    cron: 0 */1 * * * ?
     shardingTotalCount: 1
-    description: 监控转让项目
+    description: 日志监控报告
+
+#    JavaMailSender 邮件发送的配置
+spring:
+  mail:
+    host: smtp.163.com
+    username: zhengwc17@163.com
+    password: zzz123456789
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true

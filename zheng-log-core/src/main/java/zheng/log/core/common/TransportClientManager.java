@@ -236,7 +236,8 @@ public class TransportClientManager {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        calendar.add(Calendar.SECOND, -5);
+        //calendar.add(Calendar.SECOND, -5);
+        calendar.add(Calendar.MINUTE, -1);
         sdfFrom = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //dt = sdfFrom.parse("2017-10-26 17:29:00");
         String gteTime = sdfFrom.format(calendar.getTime());

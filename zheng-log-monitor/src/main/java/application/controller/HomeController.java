@@ -3,6 +3,7 @@ package application.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import zheng.log.core.common.MailManager;
 import zheng.log.core.common.WeixinManager;
 
 /**
@@ -14,6 +15,9 @@ public class HomeController {
 
     @Autowired
     private WeixinManager weixinManager;
+
+    @Autowired
+    private MailManager mailManager;
 
     @RequestMapping(value = "/index")
     String index(){

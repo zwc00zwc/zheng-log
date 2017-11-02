@@ -19,7 +19,7 @@ public class HomeController {
     @Autowired
     private HttpRequestClient httpRequestClient;
     @RequestMapping(value = "/index")
-    @ServiceRecord(service = "")
+    @ServiceRecord(service = "当前访问/home/index首页接口")
     String index(){
         Integer aa = null;
         try {
@@ -27,14 +27,21 @@ public class HomeController {
 
             }
         } catch (Exception e) {
-            logger.error("测试异常",e);
+            logger.error("访问index出现异常",e);
         }
         logger.info("当前访问index页面");
         return "index";
     }
 
+    @RequestMapping(value = "/index2")
+    @ServiceRecord(service = "index2index2index2index2")
+    String index2(){
+        String result = httpRequestClient.doGet("http://localhost:8080/home/index");
+        return result;
+    }
+
     @RequestMapping(value = "/index3")
-    @ServiceRecord(service = "")
+    @ServiceRecord(service = "当前访问/home/index3接口")
     String index3(){
         Integer aa = null;
         try {
@@ -42,16 +49,10 @@ public class HomeController {
 
             }
         } catch (Exception e) {
-            logger.error("index3测试异常",e);
+            logger.error("访问index3出现异常",e);
         }
 //        logger.info("当前访问index页面");
         return "index";
-    }
-
-    @RequestMapping(value = "/index2")
-    String index2(){
-        String result = httpRequestClient.doGet("http://localhost:8080/home/index");
-        return result;
     }
 
     @ServiceRecord(service = "当前访问index4")

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.dangdang.ddframe.job.api.ShardingContext;
 import com.dangdang.ddframe.job.api.simple.SimpleJob;
 import org.springframework.beans.factory.annotation.Autowired;
+import zheng.log.core.common.MailManager;
 import zheng.log.core.common.TransportClientManager;
 import zheng.log.core.common.WeixinManager;
 
@@ -19,6 +20,8 @@ public class MonitorLogJob implements SimpleJob {
     private TransportClientManager transportClientManager;
     @Autowired
     private WeixinManager weixinManager;
+    @Autowired
+    private MailManager mailManager;
 
     public void execute(ShardingContext shardingContext) {
         Date date = new Date();
@@ -32,18 +35,19 @@ public class MonitorLogJob implements SimpleJob {
         }
         String logname = "java-kafka-"+sRet;
         JSONArray jsonArray = transportClientManager.monitorLog(logname,"logs");
-        if (jsonArray!=null && jsonArray.size()>0){
-            for (int i=0;i<jsonArray.size();i++){
-                JSONObject jsonObject = (JSONObject)jsonArray.get(i);
-                int logCount = jsonObject.getIntValue("count");
-                if (logCount>5){
-                    try {
-                        weixinManager.monitorNotice(jsonObject.getIntValue("count"),jsonObject.getString("log"));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
+        mailManager.sendMonitorMail(jsonArray,"zheng.wenchao@yrw.com");
+//        if (jsonArray!=null && jsonArray.size()>0){
+//            for (int i=0;i<jsonArray.size();i++){
+//                JSONObject jsonObject = (JSONObject)jsonArray.get(i);
+//                int logCount = jsonObject.getIntValue("count");
+//                if (logCount>5){
+//                    try {
+//                        weixinManager.monitorNotice(jsonObject.getIntValue("count"),jsonObject.getString("log"));
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        }
     }
 }
