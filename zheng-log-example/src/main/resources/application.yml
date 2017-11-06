@@ -29,7 +29,7 @@ elasticSearch:
 
 kafka:
     servers: 192.168.48.129:9092,192.168.48.131:9092,192.168.48.132:9092
-    topic: yrw-log
+    topic: yourong-log
 
 #    JavaMailSender 邮件发送的配置
 spring:
