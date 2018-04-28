@@ -1,0 +1,2 @@
+elasticSearch:
+    servers: 192.168.48.129:9300

@@ -41,6 +41,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 /**
  * Created by alan.zheng on 2017/10/12.
@@ -57,6 +58,12 @@ public class TransportClientManager {
     public TransportClientManager(String _clusterName, String _nodeName, String _servers){
         clusterName = _clusterName;
         nodeName = _nodeName;
+        servers = _servers;
+    }
+
+    public TransportClientManager(String _servers){
+        clusterName = null;
+        nodeName = null;
         servers = _servers;
     }
 
@@ -91,6 +98,25 @@ public class TransportClientManager {
             e.printStackTrace();
         }
 
+    }
+
+    public void initSingle(){
+        Settings settings = Settings.builder().build();
+
+//        Settings settings = Settings.builder()
+//                .put("cluster.name",clusterName).build();
+//            client = new PreBuiltTransportClient(settings).addTransportAddresses(new InetSocketTransportAddress(InetAddress.getByName(host),port));
+
+        try {
+            //x-pack
+            client = new PreBuiltXPackTransportClient(settings);
+            String[] hp = servers.trim().split(":");
+            if (hp!=null&&hp.length==2){
+                client.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(hp[0]), Integer.parseInt(hp[1])));
+            }
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
     }
 
     public void shutDown(){
@@ -282,7 +308,24 @@ public class TransportClientManager {
             while (iterator.hasNext()){
                 String key = iterator.next();
                 try {
-                    xContentBuilder.field(key,jsonObject.get(key));
+                    if ("date".equals(key) && StringUtils.isNotEmpty(jsonObject.get(key)+"")){
+                        try {
+                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                            formatter.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+                            Date fsdate = formatter.parse(jsonObject.get(key)+"");
+                            Calendar ca = Calendar.getInstance();
+                            ca.setTime(fsdate);
+                            ca.add(Calendar.HOUR,-8);
+//                            String nd = jsonObject.get(key)+"";
+                            xContentBuilder.field(key,formatter.format(ca.getTime()));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        String nd = jsonObject.get(key)+"";
+                        xContentBuilder.field(key,nd);
+                    }else {
+                        xContentBuilder.field(key,jsonObject.get(key));
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

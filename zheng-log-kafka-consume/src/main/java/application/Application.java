@@ -17,6 +17,6 @@ public class Application implements EmbeddedServletContainerCustomizer {
     }
 
     public void customize(ConfigurableEmbeddedServletContainer configurableEmbeddedServletContainer) {
-        configurableEmbeddedServletContainer.setPort(8081);
+        configurableEmbeddedServletContainer.setPort(8082);
     }
 }

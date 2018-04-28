@@ -6,7 +6,7 @@ import zheng.log.core.kafka.AbstractConsumer;
 /**
  * Created by alan.zheng on 2017/10/17.
  */
-public class TestLogConsumer implements AbstractConsumer {
+public class TestLogConsumer extends AbstractConsumer {
     public void work(String msg) {
 
     }
