@@ -1,4 +1,4 @@
-package application.annotation;
+package zheng.log.core.log.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

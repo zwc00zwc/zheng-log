@@ -135,6 +135,11 @@
         <version>0.1.4</version>
       </dependency>
       <!-- log4j end-->
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>servlet-api</artifactId>
+        <version>3.0-alpha-1</version>
+      </dependency>
       <!-- json -->
       <dependency>
         <groupId>org.codehaus.jackson</groupId>

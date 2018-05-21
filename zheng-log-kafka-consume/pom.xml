@@ -37,6 +37,12 @@
         <dependency>
             <groupId>zheng-log</groupId>
             <artifactId>zheng-log-core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+            </exclusions>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>

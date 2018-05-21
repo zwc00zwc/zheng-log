@@ -1,8 +1,6 @@
-package application.handler;
+package zheng.log.core.log.annotation;
 
-import application.annotation.ServiceRecord;
 import com.alibaba.fastjson.JSONObject;
-import com.sun.jmx.snmp.Timestamp;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -16,7 +14,6 @@ import zheng.log.core.common.LoggerModel;
 import zheng.log.core.common.LoggerUtility;
 import zheng.log.core.kafka.KafkaProducerManager;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -36,7 +33,7 @@ public class ServiceRecordHandler {
     @Autowired
     private KafkaProducerManager kafkaProducerManager;
 
-    @Pointcut("@annotation(application.annotation.ServiceRecord)")
+    @Pointcut("@annotation(zheng.log.core.log.annotation.ServiceRecord)")
     public void methodPointcut(){
 
     }
@@ -78,8 +75,10 @@ public class ServiceRecordHandler {
         SimpleDateFormat sdfFrom = null;
         String sRet = null;
         try {
-            sdfFrom = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            sRet = sdfFrom.format(new Date()).toString();
+            //sdfFrom = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            //使用带时区格式
+            sdfFrom = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZ");
+            sRet = sdfFrom.format(new Date());
         } catch (Exception ex) {
         }
         loggerModel.setDate(sRet);

@@ -309,25 +309,13 @@ public class TransportClientManager {
                 String key = iterator.next();
                 try {
                     if ("date".equals(key) && StringUtils.isNotEmpty(jsonObject.get(key)+"")){
-                        try {
-                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//                            formatter.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
-                            Date fsdate = formatter.parse(jsonObject.get(key)+"");
-                            Calendar ca = Calendar.getInstance();
-                            ca.setTime(fsdate);
-                            ca.add(Calendar.HOUR,-8);
-//                            String nd = jsonObject.get(key)+"";
-                            xContentBuilder.field(key,formatter.format(ca.getTime()));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        String nd = jsonObject.get(key)+"";
-                        xContentBuilder.field(key,nd);
+                        String createTime = jsonObject.get(key)+"";
+                        xContentBuilder.field(key,createTime);
                     }else {
                         xContentBuilder.field(key,jsonObject.get(key));
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error("elasticSearch入库异常",e);
                 }
             }
         }

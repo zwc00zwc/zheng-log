@@ -68,8 +68,8 @@ public class KafkaLoggerAppender extends UnsynchronizedAppenderBase<ILoggingEven
         SimpleDateFormat sdfFrom = null;
         String sRet = null;
         try {
-            sdfFrom = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            sRet = sdfFrom.format(t.getDate()).toString();
+            sdfFrom = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZ");
+            sRet = sdfFrom.format(t.getDate());
         } catch (Exception ex) {
         } finally {
             sdfFrom = null;
